@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Classroom Code Quest - Play</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { display: flex; flex-direction: column; height: 100vh; background: #121214; color: #fff; overflow: hidden; }
+        header { background: #1a1a1e; padding: 15px 20px; border-bottom: 3px solid #29292e; display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: #00b4d8; font-weight: bold; font-size: 1.4rem; }
+        #layout { display: flex; flex: 1; }
+        .panel { flex: 1; display: flex; flex-direction: column; padding: 20px; gap: 15px; }
+        #left-side { background: #1a1a1e; max-width: 40%; border-right: 3px solid #29292e; }
+        #right-side { background: #121214; align-items: center; justify-content: center; }
+        .objective-card { background: #202024; padding: 15px; border-radius: 8px; border-left: 4px solid #00b4d8; }
+        textarea { flex: 1; background: #09090a; color: #e1e1e6; border: 1px solid #29292e; border-radius: 6px; padding: 15px; font-family: monospace; font-size: 14px; outline: none; resize: none; }
+        button { background: #00b4d8; color: #fff; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        button:hover { background: #0096b4; }
+        canvas { background: #202024; border: 4px solid #29292e; border-radius: 8px; }
+        /* Emergency Debug Box */
+        #debug-log { background: #721c24; color: #f8d7da; padding: 10px; font-family: monospace; display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- This box will show us the secret error if something crashes -->
+    <div id="debug-log"></div>
+
+    <header>
+        <div class="logo">Classroom Code Quest 🎒</div>
+        <div id="level-title">Level 1: Loading...</div>
+    </header>
+
+    <div id="layout">
+        <div id="left-side" class="panel">
+            <div class="objective-card">
+                <h3 style="margin-bottom: 5px; color: #00b4d8;">Current Task</h3>
+                <div id="level-desc">Loading instructions from data files...</div>
+            </div>
+            <textarea id="code-box">// JavaScript code goes here</textarea>
+            <button onclick="runStudentCode()">Cast Code Spell</button>
+        </div>
+
+        <div id="right-side" class="panel">
+            <canvas id="gameCanvas" width="500" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Hidden safety net to display errors on screen -->
+    <script>
+        window.onerror = function(message, source, lineno) {
+            const box = document.getElementById('debug-log');
+            box.style.display = 'block';
+            box.innerHTML = '<strong>CRASH DETECTED:</strong> ' + message + ' (Line ' + lineno + ')';
+            return false;
+        };
+    </script>
+
+    <!-- Scripts linked in correct layout sequence -->
+    <script src="levels.js"></script>
+    <script src="engine.js"></script>
+</body>
+</html>
