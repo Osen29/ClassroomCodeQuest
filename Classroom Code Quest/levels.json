@@ -1,0 +1,42 @@
+{
+  "levels": [
+    {
+      "levelNumber": 1,
+      "title": "Homeroom Dash",
+      "zone": "The Hallway",
+      "description": "Welcome to class! Move straight down the hallway to reach your desk before the morning bell rings.",
+      "gridSize": 5,
+      "startX": 0,
+      "targetX": 4,
+      "hazards": [],
+      "mainGoal": "Reach your desk at Tile 4",
+      "subGoals": [],
+      "allowedCommands": ["student.moveRight();"]
+    },
+    {
+      "levelNumber": 2,
+      "title": "The Forgotten Locker",
+      "zone": "The Hallway",
+      "description": "Oh no, you overshot your locker! Use moveLeft to back up, open your locker to grab your math textbook, and then head down to the classroom.",
+      "gridSize": 5,
+      "startX": 2,
+      "targetX": 4,
+      "hazards": [],
+      "mainGoal": "Reach the classroom at Tile 4",
+      "subGoals": [
+        {
+          "id": "grab_textbook",
+          "title": "Grab Math Textbook",
+          "triggerX": 0,
+          "requiredAction": "OPEN_LOCKER",
+          "isCompleted": false
+        }
+      ],
+      "allowedCommands": [
+        "student.moveRight();",
+        "student.moveLeft();",
+        "student.openLocker();"
+      ]
+    }
+  ]
+}
