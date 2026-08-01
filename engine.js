@@ -1,32 +1,96 @@
+
+// EMBEDDED LEVELS BLUEPRINT DATA
+const localLevelData = {
+  "levels": [
+    {
+      "levelNumber": 1,
+      "title": "Homeroom Dash",
+      "zone": "The Hallway",
+      "description": "Welcome to class! Write student.moveRight(); down in the box to reach your homeroom desk before the morning bell sounds off.",
+      "gridSize": 5,
+      "startX": 0,
+      "targetX": 4,
+      "mainGoal": "Reach your desk at Tile 4",
+      "subGoals": [],
+      "hazards": []
+    },
+    {
+      "levelNumber": 2,
+      "title": "The Forgotten Locker",
+      "zone": "The Hallway",
+      "description": "Oh no, you overshot your locker! Use student.moveLeft(); to back up, type student.openLocker(); to grab your book, and then head down to the classroom.",
+      "gridSize": 5,
+      "startX": 2,
+      "targetX": 4,
+      "mainGoal": "Reach the classroom at Tile 4",
+      "subGoals": [
+        {
+          "id": "grab_textbook",
+          "title": "Grab Math Textbook",
+          "triggerX": 0,
+          "requiredAction": "OPEN_LOCKER"
+        }
+      ],
+      "hazards": []
+    },
+    {
+      "levelNumber": 3,
+      "title": "Hallway Hazards",
+      "zone": "The Hallway",
+      "description": "Watch out! A leaky pipe left a wet floor puddle. Use student.jumpRight(); to clear it safely.",
+      "gridSize": 6,
+      "startX": 0,
+      "targetX": 5,
+      "mainGoal": "Reach the end of the hallway",
+      "subGoals": [],
+      "hazards": [
+        { "type": "puddle", "x": 2 }
+      ]
+    },
+    {
+      "levelNumber": 4,
+      "title": "Lost & Found Log",
+      "zone": "The Hallway",
+      "description": "Head down to the main office to log a missing jacket. Make sure to high-five the mascot along the way using student.highFive();!",
+      "gridSize": 6,
+      "startX": 0,
+      "targetX": 5,
+      "mainGoal": "Reach the Lost & Found Bin at Tile 5",
+      "subGoals": [
+        {
+          "id": "high_five",
+          "title": "High-five the Mascot",
+          "triggerX": 2,
+          "requiredAction": "HIGH_FIVE"
+        }
+      ],
+      "hazards": []
+    }
+  ]
+};
+
 // Game Architecture State Configuration
 let allLevels = [];
-let currentLevelIndex = 0; // Starts at Level 1 (Index 0)
+let currentLevelIndex = 0; 
 let studentPos = 0;
 let actionQueue = [];
 let isAnimating = false;
-
-// Sub-goal tracker tracking variables
 let completedSubGoals = {};
 
 const TILE_SIZE = 100;
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// 1. Initializer: Pull JSON data mapping configuration parameters from storage
+// Initializer: Pull directly from the local embedded variable block
 window.addEventListener("DOMContentLoaded", () => {
-    fetch("levels.json")
-        .then(response => response.json())
-        .then(data => {
-            allLevels = data.levels;
-            loadLevel(currentLevelIndex);
-        })
-        .catch(err => {
-            console.error("Critical: levels.json data layout failed to load.", err);
-            document.getElementById("level-desc").innerText = "Error loading level blueprint data.";
-        });
+    if (localLevelData && localLevelData.levels) {
+        allLevels = localLevelData.levels;
+        loadLevel(currentLevelIndex);
+    } else {
+        document.getElementById("level-desc").innerText = "Error loading level blueprint data.";
+    }
 });
 
-// 2. Map Loader: Populates text variables and resets the rendering canvas layout
 function loadLevel(index) {
     if (!allLevels || allLevels.length === 0) return;
     
@@ -36,10 +100,8 @@ function loadLevel(index) {
     isAnimating = false;
     completedSubGoals = {};
 
-    // Update UI Header and Text Boxes
     document.getElementById("level-title").innerText = `Level ${level.levelNumber}: ${level.title}`;
     
-    // Clear and build the dynamic task tracker UI checkbox lists
     let subGoalHTML = `<strong>Goal:</strong> ${level.mainGoal}<br><br>`;
     if (level.subGoals && level.subGoals.length > 0) {
         subGoalHTML += `<strong>Tasks:</strong><br>`;
@@ -52,24 +114,18 @@ function loadLevel(index) {
         });
     }
     document.getElementById("level-desc").innerHTML = subGoalHTML;
-
-    // Prefill code box sample boilerplate patterns
     document.getElementById("code-box").value = `// ${level.description}\nstudent.moveRight();\n`;
 
     renderCanvasMap();
 }
 
-// 3. Visual Render Pipeline Loop Engine
 function renderCanvasMap() {
     const level = allLevels[currentLevelIndex];
     if (!level) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Adjust canvas layout size dynamically based on map constraints
     canvas.width = level.gridSize * TILE_SIZE;
 
-    // Draw Floor Tiles
     for (let i = 0; i < level.gridSize; i++) {
         ctx.fillStyle = (i % 2 === 0) ? "#29292e" : "#323238";
         ctx.fillRect(i * TILE_SIZE, 0, TILE_SIZE, canvas.height);
@@ -77,7 +133,6 @@ function renderCanvasMap() {
         ctx.strokeRect(i * TILE_SIZE, 0, TILE_SIZE, canvas.height);
     }
 
-    // Draw Hazards (Puddles, etc.)
     if (level.hazards) {
         level.hazards.forEach(hz => {
             ctx.fillStyle = "#0077b6";
@@ -90,7 +145,6 @@ function renderCanvasMap() {
         });
     }
 
-    // Draw Interactive Sub-Goal Elements
     if (level.subGoals) {
         level.subGoals.forEach(sg => {
             const isDone = completedSubGoals[sg.id];
@@ -100,54 +154,38 @@ function renderCanvasMap() {
             ctx.fill();
             ctx.fillStyle = "#fff";
             ctx.font = "11px sans-serif";
-            ctx.fillText(sg.title.split(" ")[0], sg.triggerX * TILE_SIZE + 35, 115);
+            ctx.fillText("⭐ Task", sg.triggerX * TILE_SIZE + 32, 115);
         });
     }
 
-    // Draw Main Target Exit Gate Destination
     ctx.fillStyle = "#e63946";
     ctx.fillRect(level.targetX * TILE_SIZE + 30, 40, 40, 60);
     ctx.fillStyle = "#fff";
     ctx.font = "12px sans-serif";
     ctx.fillText("🚪 Goal", level.targetX * TILE_SIZE + 32, 125);
 
-    // Draw Student Character Sprite Square
     ctx.fillStyle = "#00b4d8";
     ctx.fillRect(studentPos * TILE_SIZE + 35, 50, 30, 70);
 }
 
-// 4. Code Evaluator Sandbox Proxy Mapping System
 function runStudentCode() {
     if (isAnimating) return;
 
     const level = allLevels[currentLevelIndex];
-    studentPos = level.startX; // Reset map variables
+    studentPos = level.startX; 
     actionQueue = [];
     completedSubGoals = {};
-    loadLevel(currentLevelIndex); // Clears checkmarks UI
+    loadLevel(currentLevelIndex); 
 
     const studentCodeText = document.getElementById("code-box").value;
 
-       // Define accessible commands inside sandbox execution wrappers
     const sandboxAPI = {
         moveRight: () => actionQueue.push({ type: 'WALK', dist: 1 }),
         moveLeft: () => actionQueue.push({ type: 'WALK', dist: -1 }),
         jumpRight: () => actionQueue.push({ type: 'JUMP', dist: 2 }),
         openLocker: () => actionQueue.push({ type: 'ACTION', value: 'OPEN_LOCKER' }),
-        highFive: () => actionQueue.push({ type: 'ACTION', value: 'HIGH_FIVE' }),
-        
-        // --- NEW CAFETERIA & HALLWAY API UTILITIES ---
-        fillWater: () => actionQueue.push({ type: 'ACTION', value: 'FILL_WATER' }),
-        pickUpFork: () => actionQueue.push({ type: 'ACTION', value: 'PICK_UP_FORK' }),
-        pickUpNapkins: () => actionQueue.push({ type: 'ACTION', value: 'PICK_UP_NAPKINS' }),
-        pickUpMilk: () => actionQueue.push({ type: 'ACTION', value: 'PICK_UP_MILK' }),
-        pickUpApple: () => actionQueue.push({ type: 'ACTION', value: 'PICK_UP_APPLE' }),
-        pumpKetchup: () => actionQueue.push({ type: 'ACTION', value: 'PUMP_KETCHUP' }),
-        wipeTable: () => actionQueue.push({ type: 'ACTION', value: 'WIPE_TABLE' }),
-        tossTrash: () => actionQueue.push({ type: 'ACTION', value: 'TOSS_TRASH' }),
-        pickUpBottle: () => actionQueue.push({ type: 'ACTION', value: 'PICK_UP_BOTTLE' })
+        highFive: () => actionQueue.push({ type: 'ACTION', value: 'HIGH_FIVE' })
     };
-
 
     try {
         const executeSandbox = new Function('student', studentCodeText);
@@ -158,11 +196,10 @@ function runStudentCode() {
             tickAnimationLoop();
         }
     } catch (error) {
-        alert("Syntax Error in Code Box: " + error.message);
+        alert("Syntax Error: " + error.message);
     }
 }
 
-// 5. Sequential Animation Processing Frames Engine
 function tickAnimationLoop() {
     const level = allLevels[currentLevelIndex];
     if (actionQueue.length === 0) {
@@ -176,16 +213,14 @@ function tickAnimationLoop() {
     if (currentCommand.type === 'WALK' || currentCommand.type === 'JUMP') {
         studentPos += currentCommand.dist;
         
-        // Block player from traveling outside array indices configurations
         if (studentPos < 0) studentPos = 0;
         if (studentPos >= level.gridSize) studentPos = level.gridSize - 1;
 
-        // Hazard Collision Trigger Logic Check Rules
         if (level.hazards) {
             const hitHazard = level.hazards.find(hz => hz.x === studentPos);
             if (hitHazard && currentCommand.type !== 'JUMP') {
                 renderCanvasMap();
-                alert(`Oops! You stepped right into a ${hitHazard.type}! Adjust your movements.`);
+                alert("Oops! You stepped right into a puddle!");
                 isAnimating = false;
                 return;
             }
@@ -197,7 +232,6 @@ function tickAnimationLoop() {
             level.subGoals.forEach(sg => {
                 if (studentPos === sg.triggerX && currentCommand.value === sg.requiredAction) {
                     completedSubGoals[sg.id] = true;
-                    // Check box visually green highlight markers on layout sidebar panels
                     const indicator = document.getElementById(`chk-${sg.id}`);
                     if (indicator) {
                         indicator.style.background = "#2a9d8f";
@@ -209,15 +243,13 @@ function tickAnimationLoop() {
     }
 
     renderCanvasMap();
-    setTimeout(tickAnimationLoop, 600); // 0.6 second delay pacing between steps
+    setTimeout(tickAnimationLoop, 600); 
 }
 
-// 6. Win Conditions Verification Framework
 function evaluateWinCondition() {
     const level = allLevels[currentLevelIndex];
     
     if (studentPos === level.targetX) {
-        // Validate if all available sub-goals listed were completed properly
         let totalSubGoals = level.subGoals ? level.subGoals.length : 0;
         let earnedSubGoals = Object.keys(completedSubGoals).filter(k => completedSubGoals[k]).length;
 
@@ -225,10 +257,10 @@ function evaluateWinCondition() {
             alert("Level Completed! Outstanding 3-Star Execution! 🎉🏆");
             advanceNextLevel();
         } else {
-            alert("Main target reached, but you missed a sub-goal target. Retry to unlock full credit!");
+            alert("Main target reached, but you missed a sub-goal target.");
         }
     } else {
-        alert("Execution finished, but you didn't reach the classroom door goal coordinate.");
+        alert("Finished running, but you didn't reach the door.");
     }
 }
 
@@ -237,6 +269,6 @@ function advanceNextLevel() {
         currentLevelIndex++;
         loadLevel(currentLevelIndex);
     } else {
-        alert("Phenomenal work! You completed all matching school level structures programmed!");
+        alert("Phenomenal work! You completed all matching school level structures!");
     }
 }
