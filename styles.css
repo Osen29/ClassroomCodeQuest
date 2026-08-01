@@ -1,0 +1,191 @@
+/* --- Global Reset & Game Branding Colors --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #0f0f12;
+    color: #e1e1e6;
+    overflow: hidden;
+}
+
+/* --- Emergency Debug Overlay Layout --- */
+#debug-log {
+    background: #451a1a;
+    color: #f8d7da;
+    padding: 12px 20px;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    border-bottom: 2px solid #ea6b6b;
+    display: none;
+}
+
+/* --- Top Navigation Header Bar --- */
+header {
+    background: #16161a;
+    padding: 12px 24px;
+    border-bottom: 2px solid #24242b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+header .logo {
+    color: #00b4d8;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+header div label {
+    font-size: 13px;
+    color: #8c8c9e;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- Dynamic Level Selector Dropdown --- */
+#level-select {
+    background: #202026;
+    color: #ffffff;
+    border: 1px solid #32323f;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+#level-select:hover {
+    border-color: #00b4d8;
+    background: #24242e;
+}
+
+#level-title {
+    font-weight: 700;
+    color: #00b4d8;
+    background: rgba(0, 180, 216, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: 1px solid rgba(0, 180, 216, 0.2);
+}
+
+/* --- Split Panel Layout Framework --- */
+#layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    gap: 20px;
+}
+
+#left-side {
+    background: #16161a;
+    max-width: 38%;
+    border-right: 2px solid #24242b;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.2);
+}
+
+#right-side {
+    background: #0f0f12;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+/* --- Quest Tracker Cards & Checkboxes --- */
+.objective-card {
+    background: #1d1d24;
+    padding: 18px;
+    border-radius: 8px;
+    border-left: 4px solid #00b4d8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.objective-card h3 {
+    font-size: 12px;
+    color: #00b4d8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+#level-desc {
+    color: #c4c4d1;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* --- IDE Code Editor Workspace Box --- */
+textarea {
+    flex: 1;
+    background: #0a0a0d;
+    color: #a4e58b; /* Vibrant programmer green */
+    border: 1px solid #24242b;
+    border-radius: 8px;
+    padding: 18px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    outline: none;
+    resize: none;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea:focus {
+    border-color: #00b4d8;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(0, 180, 216, 0.15);
+}
+
+/* --- Primary Execution Call-to-Action Buttons --- */
+button {
+    background: #00b4d8;
+    color: #ffffff;
+    border: none;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+button:hover {
+    background: #0096b4;
+    box-shadow: 0 6px 16px rgba(0, 180, 216, 0.4);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* --- HTML5 Canvas Render Windows --- */
+canvas {
+    background: #16161a;
+    border: 3px solid #24242b;
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    max-width: 100%;
+}
