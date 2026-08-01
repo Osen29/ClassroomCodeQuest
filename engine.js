@@ -102,15 +102,20 @@ const TILE_SIZE = 70; // Slightly smaller to fit a 2D grid beautifully on modern
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Initializer Loading Hooks
+// Initializer Loading Hooks - Now safely handles default text setups once
 window.addEventListener("DOMContentLoaded", () => {
     if (localLevelData && localLevelData.levels) {
         allLevels = localLevelData.levels;
         loadLevel(currentLevelIndex);
+        
+        // SETS STARTER TEXT ONLY ONCE WHEN THE WEBSITE FIRST LOADS
+        const firstLevel = allLevels[0];
+        document.getElementById("code-box").value = `// ${firstLevel.description}\nstudent.moveRight();\nstudent.moveDown();\n`;
     } else {
         document.getElementById("level-desc").innerText = "Error loading level blueprint data.";
     }
 });
+
 
 function loadLevel(index) {
     if (!allLevels || allLevels.length === 0) return;
@@ -136,7 +141,6 @@ function loadLevel(index) {
         });
     }
     document.getElementById("level-desc").innerHTML = subGoalHTML;
-    document.getElementById("code-box").value = `// ${level.description}\nstudent.moveRight();\nstudent.moveDown();\n`;
 
     updateLevelDropdownUI();
     renderCanvasMap();
@@ -330,10 +334,15 @@ function advanceNextLevel() {
     if (currentLevelIndex < allLevels.length - 1) {
         currentLevelIndex++;
         loadLevel(currentLevelIndex);
+        
+        // Fresh text script template setup for the newly unlocked level room!
+        const nextLevel = allLevels[currentLevelIndex];
+        document.getElementById("code-box").value = `// ${nextLevel.description}\nstudent.moveRight();\n`;
     } else {
         alert("Phenomenal work! You completed the entire Classroom Code Quest grid system!");
     }
 }
+
 
 // Function triggered when a user changes the dropdown selection manually
 function changeLevelViaDropdown(selectedLevelIndex) {
