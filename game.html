@@ -27,10 +27,18 @@
     <!-- This box will show us the secret error if something crashes -->
     <div id="debug-log"></div>
 
-    <header>
+        <header>
         <div class="logo">Classroom Code Quest 🎒</div>
-        <div id="level-title">Level 1: Loading...</div>
+        <div>
+            <!-- Dropdown menu selector -->
+            <label for="level-select" style="font-size: 14px; color: #aaa; margin-right: 8px;">Jump to Level:</label>
+            <select id="level-select" onchange="changeLevelViaDropdown(this.value)" style="background: #202024; color: #fff; border: 1px solid #29292e; padding: 6px 12px; border-radius: 4px; outline: none; cursor: pointer;">
+                <!-- This will be automatically filled with options by our engine -->
+            </select>
+        </div>
+        <div id="level-title" style="font-weight: bold; color: #00b4d8;">Level 1: Loading...</div>
     </header>
+
 
     <div id="layout">
         <div id="left-side" class="panel">

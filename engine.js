@@ -257,6 +257,7 @@ function loadLevel(index) {
     document.getElementById("level-desc").innerHTML = subGoalHTML;
     document.getElementById("code-box").value = `// ${level.description}\nstudent.moveRight();\n`;
 
+    updateLevelDropdownUI();
     renderCanvasMap();
 }
 
@@ -406,10 +407,53 @@ function evaluateWinCondition() {
 }
 
 function advanceNextLevel() {
+    // Save current index as the highest beaten milestone index
+    let highestBeaten = parseInt(localStorage.getItem("highestLevelBeaten") || "0");
+    if (currentLevelIndex > highestBeaten) {
+        localStorage.setItem("highestLevelBeaten", currentLevelIndex.toString());
+    }
+
     if (currentLevelIndex < allLevels.length - 1) {
         currentLevelIndex++;
         loadLevel(currentLevelIndex);
     } else {
         alert("Phenomenal work! You completed all matching school level structures!");
     }
+}
+
+// Function triggered when a user changes the dropdown selection manually
+function changeLevelViaDropdown(selectedLevelIndex) {
+    const index = parseInt(selectedLevelIndex);
+    currentLevelIndex = index;
+    loadLevel(currentLevelIndex);
+}
+
+// Function to rebuild the dropdown list options and enforce locking rules
+function updateLevelDropdownUI() {
+    const dropdown = document.getElementById("level-select");
+    if (!dropdown || !allLevels || allLevels.length === 0) return;
+
+    dropdown.innerHTML = ""; // Clear existing options
+
+    // Check what the highest level beaten is from local memory (defaults to 1)
+    let highestBeaten = parseInt(localStorage.getItem("highestLevelBeaten") || "0");
+
+    allLevels.forEach((level, idx) => {
+        const option = document.createElement("option");
+        option.value = idx;
+        option.text = `Lvl ${level.levelNumber}: ${level.title}`;
+        
+        // Match the dropdown display index to the current playing field index
+        if (idx === currentLevelIndex) {
+            option.selected = true;
+        }
+
+        // LOCKING RULE: Gray out if it's past Level 1 AND they haven't beaten the previous level
+        if (idx > 0 && idx > highestBeaten) {
+            option.disabled = true;
+            option.text += " 🔒"; // Add a lock emoji marker text string
+        }
+
+        dropdown.appendChild(option);
+    });
 }
