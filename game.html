@@ -39,6 +39,23 @@
             <canvas id="gameCanvas" width="500" height="200"></canvas>
         </div>
     </div>
+    <!-- DYNAMIC WIN OVERLAY POPUP LAYER -->
+    <div id="win-overlay">
+        <div class="win-card">
+            <h2>🎉 Level Complete! 🎉</h2>
+            <p id="win-zone-text">The Hallway Cleared</p>
+            
+            <!-- Animated Star Container Matrix Grid -->
+            <div class="star-rating">
+                <span id="star1" class="star">★</span>
+                <span id="star2" class="star">★</span>
+                <span id="star3" class="star">★</span>
+            </div>
+            
+            <p id="win-message">Outstanding 2D Path Routing!</p>
+            <button id="next-level-btn" onclick="closeWinOverlayAndAdvance()">Next Level 🎒</button>
+        </div>
+    </div>
 
     <!-- Hidden system error intercept listener layout safety grid -->
     <script>

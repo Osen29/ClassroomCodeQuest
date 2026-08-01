@@ -189,3 +189,97 @@ canvas {
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
     max-width: 100%;
 }
+/* --- Dynamic Win Screen Overlay Animations --- */
+#win-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 10, 13, 0.85); /* Deep frosted backdrop blurring background gameplay */
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+/* Toggle state triggered programmatically via engine routing */
+#win-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.win-card {
+    background: #1d1d24;
+    border: 2px solid #2a9d8f;
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(42, 157, 143, 0.2);
+    max-width: 450px;
+    width: 90%;
+    transform: scale(0.8);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#win-overlay.active .win-card {
+    transform: scale(1);
+}
+
+.win-card h2 {
+    color: #2a9d8f;
+    font-size: 2rem;
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px rgba(42, 157, 143, 0.3);
+}
+
+#win-zone-text {
+    font-size: 13px;
+    color: #8c8c9e;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+}
+
+/* --- Golden Star Rating Arrays --- */
+.star-rating {
+    margin: 15px 0 25px 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.star {
+    font-size: 3.5rem;
+    color: #2b2b36; /* Default unearned grey star template background state */
+    text-shadow: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.star.earned {
+    color: #e9c46a; /* Bright neon golden star reward highlight color template */
+    text-shadow: 0 0 15px rgba(233, 196, 106, 0.5);
+    transform: scale(1.15);
+}
+
+#win-message {
+    color: #e1e1e6;
+    font-size: 15px;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+#next-level-btn {
+    background: #2a9d8f;
+    box-shadow: 0 4px 14px rgba(42, 157, 143, 0.4);
+    width: 100%;
+}
+
+#next-level-btn:hover {
+    background: #218074;
+    box-shadow: 0 6px 20px rgba(42, 157, 143, 0.5);
+}

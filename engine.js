@@ -494,16 +494,48 @@ function evaluateWinCondition() {
         let totalSubGoals = level.subGoals ? level.subGoals.length : 0;
         let earnedSubGoals = Object.keys(completedSubGoals).filter(k => completedSubGoals[k]).length;
 
-        if (totalSubGoals === earnedSubGoals) {
-            alert("Level Completed! Outstanding 2D Path Routing! 🎉🏆");
-            advanceNextLevel();
-        } else {
-            alert("Main goal reached, but you missed a task requirement.");
-        }
+        // Visual Display System: Trigger the interactive win panel configuration
+        showWinOverlay(level.zone, totalSubGoals, earnedSubGoals);
     } else {
         alert("Code finished execution, but you are not at the target coordinates.");
     }
 }
+
+// Triggers the visual rendering layout transitions for the overlay system
+function showWinOverlay(zoneName, totalSubs, earnedSubs) {
+    document.getElementById("win-zone-text").innerText = `${zoneName} Cleared`;
+    
+    // Reset star colors back to base configurations default state
+    document.getElementById("star1").classList.remove("earned");
+    document.getElementById("star2").classList.remove("earned");
+    document.getElementById("star3").classList.remove("earned");
+
+    // Star Tracking Loop Rules: 
+    // Star 1 = Beat the level main door. 
+    // Star 2 = Half or more subtasks. 
+    // Star 3 = Perfect clean run.
+    document.getElementById("star1").classList.add("earned");
+    
+    if (totalSubs > 0) {
+        if (earnedSubs >= totalSubs / 2) document.getElementById("star2").classList.add("earned");
+        if (earnedSubs === totalSubs) document.getElementById("star3").classList.add("earned");
+    } else {
+        // If the level has no custom sub-goals (like level 1), automatically award 3 stars for success!
+        document.getElementById("star2").classList.add("earned");
+        document.getElementById("star3").classList.add("earned");
+    }
+
+    // Set matching summary script responses based on mastery grades
+    if (earnedSubs === totalSubs) {
+        document.getElementById("win-message").innerText = "Perfect 3-Star Mastery! All school task requirements fully logged inside schedule pipelines!";
+    } else {
+        document.getElementById("win-message").innerText = "Level Cleared! Try re-writing optimized steps next time to catch missing tasks.";
+    }
+
+    // Slide overlay visible onto player desktop panels
+    document.getElementById("win-overlay").classList.add("active");
+}
+
 
 function updateLevelDropdownUI() {
     const dropdown = document.getElementById("level-select");
@@ -547,5 +579,13 @@ function changeLevelViaDropdown(selectedLevelIndex) {
     
     const chosenLevel = allLevels[currentLevelIndex];
     document.getElementById("code-box").value = `// ${chosenLevel.description}\nstudent.moveRight();\n`;
+}
+// Triggered when a student clicks the "Next Level" action switch inside the win screen card
+function closeWinOverlayAndAdvance() {
+    // Hide panel smoothly
+    document.getElementById("win-overlay").classList.remove("active");
+    
+    // Call baseline progression system
+    advanceNextLevel();
 }
 
