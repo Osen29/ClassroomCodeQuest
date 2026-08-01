@@ -1,33 +1,44 @@
-
-// EMBEDDED LEVELS BLUEPRINT DATA
+// EMBEDDED 2D LEVELS BLUEPRINT DATA
 const localLevelData = {
   "levels": [
     {
       "levelNumber": 1,
       "title": "Homeroom Dash",
       "zone": "The Hallway",
-      "description": "Welcome to class! Write student.moveRight(); down in the box to reach your homeroom desk before the morning bell sounds off.",
-      "gridSize": 5,
+      "description": "Welcome to class! Move around the classroom desks to reach your seat. Write student.moveRight(); student.moveDown(); etc.",
+      "gridWidth": 6,
+      "gridHeight": 4,
       "startX": 0,
-      "targetX": 4,
-      "mainGoal": "Reach your desk at Tile 4",
+      "startY": 0,
+      "targetX": 5,
+      "targetY": 3,
+      "mainGoal": "Reach your desk at bottom right (5, 3)",
       "subGoals": [],
-      "hazards": []
+      "hazards": [
+        { "type": "desk", "x": 2, "y": 1 },
+        { "type": "desk", "x": 3, "y": 1 },
+        { "type": "desk", "x": 2, "y": 2 },
+        { "type": "desk", "x": 3, "y": 2 }
+      ]
     },
     {
       "levelNumber": 2,
       "title": "The Forgotten Locker",
       "zone": "The Hallway",
-      "description": "Oh no, you overshot your locker! Use student.moveLeft(); to back up, type student.openLocker(); to grab your book, and then head down to the classroom.",
-      "gridSize": 5,
-      "startX": 2,
+      "description": "You overshot your locker! Navigate up and left to your locker (0, 0) to grab your book, then head to the classroom door.",
+      "gridWidth": 5,
+      "gridHeight": 5,
+      "startX": 4,
+      "startY": 4,
       "targetX": 4,
-      "mainGoal": "Reach the classroom at Tile 4",
+      "targetY": 0,
+      "mainGoal": "Reach the classroom door at (4, 0)",
       "subGoals": [
         {
           "id": "grab_textbook",
-          "title": "Grab Math Textbook",
+          "title": "Grab Math Textbook at (0,0)",
           "triggerX": 0,
+          "triggerY": 0,
           "requiredAction": "OPEN_LOCKER"
         }
       ],
@@ -37,171 +48,40 @@ const localLevelData = {
       "levelNumber": 3,
       "title": "Hallway Hazards",
       "zone": "The Hallway",
-      "description": "Watch out! A leaky pipe left a wet floor puddle. Use student.jumpRight(); to clear it safely.",
-      "gridSize": 6,
+      "description": "Navigate around the active cleaning zones and slippery puddles to reach the end of the corridor!",
+      "gridWidth": 7,
+      "gridHeight": 4,
       "startX": 0,
-      "targetX": 5,
-      "mainGoal": "Reach the end of the hallway",
+      "startY": 1,
+      "targetX": 6,
+      "targetY": 2,
+      "mainGoal": "Reach the end exit at (6, 2)",
       "subGoals": [],
       "hazards": [
-        { "type": "puddle", "x": 2 }
+        { "type": "puddle", "x": 3, "y": 1 },
+        { "type": "puddle", "x": 3, "y": 2 },
+        { "type": "puddle", "x": 2, "y": 2 }
       ]
     },
     {
       "levelNumber": 4,
       "title": "Lost & Found Log",
       "zone": "The Hallway",
-      "description": "Head down to the main office to log a missing jacket. Make sure to high-five the mascot along the way using student.highFive();!",
-      "gridSize": 6,
+      "description": "Head down into the office lounge. Walk up to high-five the mascot at (2, 0), then head down to the Lost & Found Bin.",
+      "gridWidth": 6,
+      "gridHeight": 5,
       "startX": 0,
+      "startY": 2,
       "targetX": 5,
-      "mainGoal": "Reach the Lost & Found Bin at Tile 5",
+      "targetY": 4,
+      "mainGoal": "Reach the Lost & Found Bin at (5, 4)",
       "subGoals": [
         {
           "id": "high_five",
-          "title": "High-five the Mascot",
+          "title": "High-five the Mascot at (2,0)",
           "triggerX": 2,
+          "triggerY": 0,
           "requiredAction": "HIGH_FIVE"
-        }
-      ],
-      "hazards": []
-    },
-    {
-      "levelNumber": 5,
-      "title": "Principal's Greeting",
-      "zone": "The Hallway",
-      "description": "Deliver an attendance sheet to the front office counter. Remember to refill your water bottle on your way inside using student.fillWater();.",
-      "gridSize": 6,
-      "startX": 0,
-      "targetX": 5,
-      "mainGoal": "Deliver sheet to the office at Tile 5",
-      "subGoals": [
-        {
-          "id": "refill_bottle",
-          "title": "Refill Water Bottle",
-          "triggerX": 3,
-          "requiredAction": "FILL_WATER"
-        }
-      ],
-      "hazards": []
-    },
-    {
-      "levelNumber": 6,
-      "title": "Tray Stack Counter",
-      "zone": "The Cafeteria",
-      "description": "Welcome to the Cafeteria! Move down the lunch counter. Make sure to pick up a clean fork using student.pickUpFork(); and napkins using student.pickUpNapkins(); before reaching your tray.",
-      "gridSize": 8,
-      "startX": 0,
-      "targetX": 7,
-      "mainGoal": "Collect lunch tray at Tile 7",
-      "subGoals": [
-        {
-          "id": "grab_fork",
-          "title": "Grab a Clean Fork",
-          "triggerX": 2,
-          "requiredAction": "PICK_UP_FORK"
-        },
-        {
-          "id": "grab_napkins",
-          "title": "Grab Napkins",
-          "triggerX": 4,
-          "requiredAction": "PICK_UP_NAPKINS"
-        }
-      ],
-      "hazards": []
-    },
-    {
-      "levelNumber": 7,
-      "title": "The Pizza Line",
-      "zone": "The Cafeteria",
-      "description": "The lunch line is moving! Step up to the pizza station. Snag a chocolate milk using student.pickUpMilk(); and a healthy apple using student.pickUpApple(); from the coolers as you pass them.",
-      "gridSize": 8,
-      "startX": 0,
-      "targetX": 7,
-      "mainGoal": "Reach the main Pizza Counter at Tile 7",
-      "subGoals": [
-        {
-          "id": "grab_milk",
-          "title": "Grab Chocolate Milk",
-          "triggerX": 2,
-          "requiredAction": "PICK_UP_MILK"
-        },
-        {
-          "id": "grab_apple",
-          "title": "Grab a Healthy Apple",
-          "triggerX": 5,
-          "requiredAction": "PICK_UP_APPLE"
-        }
-      ],
-      "hazards": []
-    },
-    {
-      "levelNumber": 8,
-      "title": "Condiment Pump Chaos",
-      "zone": "The Cafeteria",
-      "description": "Time to dress your lunch! Head to your table, but stop at the condiment station to pump ketchup using student.pumpKetchup();. Watch out for a slippery messy floor puddle!",
-      "gridSize": 8,
-      "startX": 0,
-      "targetX": 7,
-      "mainGoal": "Sit at your lunch table at Tile 7",
-      "subGoals": [
-        {
-          "id": "pump_ketchup",
-          "title": "Pump Ketchup",
-          "triggerX": 3,
-          "requiredAction": "PUMP_KETCHUP"
-        }
-      ],
-      "hazards": [
-        { "type": "puddle", "x": 5 }
-      ]
-    },
-    {
-      "levelNumber": 9,
-      "title": "Table Cleanup Duty",
-      "zone": "The Cafeteria",
-      "description": "Lunch is over! Help clean up. Walk to the recycling area, wiping a messy table using student.wipeTable(); and tossing an apple core into the bin using student.tossTrash();.",
-      "gridSize": 8,
-      "startX": 0,
-      "targetX": 7,
-      "mainGoal": "Reach the exit doors at Tile 7",
-      "subGoals": [
-        {
-          "id": "wipe_table",
-          "title": "Wipe Messy Table",
-          "triggerX": 2,
-          "requiredAction": "WIPE_TABLE"
-        },
-        {
-          "id": "toss_core",
-          "title": "Toss Apple Core",
-          "triggerX": 5,
-          "requiredAction": "TOSS_TRASH"
-        }
-      ],
-      "hazards": []
-    },
-    {
-      "levelNumber": 10,
-      "title": "Recycle Bin Sorting",
-      "zone": "The Cafeteria",
-      "description": "Last step before science class! Navigate to the main bin array and pick up two separate stray plastic bottles using student.pickUpBottle();.",
-      "gridSize": 8,
-      "startX": 0,
-      "targetX": 7,
-      "mainGoal": "Report to the Science wing corridor at Tile 7",
-      "subGoals": [
-        {
-          "id": "bottle_one",
-          "title": "Pick Up Bottle 1",
-          "triggerX": 2,
-          "requiredAction": "PICK_UP_BOTTLE"
-        },
-        {
-          "id": "bottle_two",
-          "title": "Pick Up Bottle 2",
-          "triggerX": 4,
-          "requiredAction": "PICK_UP_BOTTLE"
         }
       ],
       "hazards": []
@@ -209,20 +89,20 @@ const localLevelData = {
   ]
 };
 
-
-// Game Architecture State Configuration
+// Game Architecture 2D State Configuration
 let allLevels = [];
 let currentLevelIndex = 0; 
-let studentPos = 0;
+let studentX = 0;
+let studentY = 0;
 let actionQueue = [];
 let isAnimating = false;
 let completedSubGoals = {};
 
-const TILE_SIZE = 100;
+const TILE_SIZE = 70; // Slightly smaller to fit a 2D grid beautifully on modern screens
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Initializer: Pull directly from the local embedded variable block
+// Initializer Loading Hooks
 window.addEventListener("DOMContentLoaded", () => {
     if (localLevelData && localLevelData.levels) {
         allLevels = localLevelData.levels;
@@ -236,7 +116,8 @@ function loadLevel(index) {
     if (!allLevels || allLevels.length === 0) return;
     
     const level = allLevels[index];
-    studentPos = level.startX;
+    studentX = level.startX;
+    studentY = level.startY;
     actionQueue = [];
     isAnimating = false;
     completedSubGoals = {};
@@ -255,76 +136,89 @@ function loadLevel(index) {
         });
     }
     document.getElementById("level-desc").innerHTML = subGoalHTML;
-    document.getElementById("code-box").value = `// ${level.description}\nstudent.moveRight();\n`;
+    document.getElementById("code-box").value = `// ${level.description}\nstudent.moveRight();\nstudent.moveDown();\n`;
 
     updateLevelDropdownUI();
     renderCanvasMap();
 }
 
+// 2D Visual Rendering Module
 function renderCanvasMap() {
     const level = allLevels[currentLevelIndex];
     if (!level) return;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.width = level.gridSize * TILE_SIZE;
+    // Expand canvas width and height dynamically for 2D room maps
+    canvas.width = level.gridWidth * TILE_SIZE;
+    canvas.height = level.gridHeight * TILE_SIZE;
 
-    for (let i = 0; i < level.gridSize; i++) {
-        ctx.fillStyle = (i % 2 === 0) ? "#29292e" : "#323238";
-        ctx.fillRect(i * TILE_SIZE, 0, TILE_SIZE, canvas.height);
-        ctx.strokeStyle = "#121214";
-        ctx.strokeRect(i * TILE_SIZE, 0, TILE_SIZE, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw full 2D Checkerboard Grid layout floor matrix
+    for (let x = 0; x < level.gridWidth; x++) {
+        for (let y = 0; y < level.gridHeight; y++) {
+            ctx.fillStyle = ((x + y) % 2 === 0) ? "#29292e" : "#323238";
+            ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            ctx.strokeStyle = "#121214";
+            ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        }
     }
 
+    // Draw Hazards / Obstacles
     if (level.hazards) {
         level.hazards.forEach(hz => {
-            ctx.fillStyle = "#0077b6";
-            ctx.beginPath();
-            ctx.arc(hz.x * TILE_SIZE + 50, 140, 20, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.fillStyle = hz.type === "desk" ? "#8b5a2b" : "#0077b6"; // Brown desks, blue puddles
+            ctx.fillRect(hz.x * TILE_SIZE + 10, hz.y * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
             ctx.fillStyle = "#fff";
-            ctx.font = "12px sans-serif";
-            ctx.fillText("💧 Puddle", hz.x * TILE_SIZE + 25, 145);
+            ctx.font = "10px sans-serif";
+            ctx.fillText(hz.type === "desk" ? "🪑 Desk" : "💧 Water", hz.x * TILE_SIZE + 15, hz.y * TILE_SIZE + TILE_SIZE / 2 + 4);
         });
     }
 
+    // Draw Sub-Goals
     if (level.subGoals) {
         level.subGoals.forEach(sg => {
             const isDone = completedSubGoals[sg.id];
             ctx.fillStyle = isDone ? "#55555e" : "#e9c46a";
             ctx.beginPath();
-            ctx.arc(sg.triggerX * TILE_SIZE + 50, 80, 18, 0, Math.PI * 2);
+            ctx.arc(sg.triggerX * TILE_SIZE + TILE_SIZE/2, sg.triggerY * TILE_SIZE + TILE_SIZE/2, 14, 0, Math.PI * 2);
             ctx.fill();
             ctx.fillStyle = "#fff";
-            ctx.font = "11px sans-serif";
-            ctx.fillText("⭐ Task", sg.triggerX * TILE_SIZE + 32, 115);
+            ctx.font = "10px sans-serif";
+            ctx.fillText("⭐ Task", sg.triggerX * TILE_SIZE + 18, sg.triggerY * TILE_SIZE + TILE_SIZE - 8);
         });
     }
 
+    // Draw Exit Goal Destination
     ctx.fillStyle = "#e63946";
-    ctx.fillRect(level.targetX * TILE_SIZE + 30, 40, 40, 60);
+    ctx.fillRect(level.targetX * TILE_SIZE + 15, level.targetY * TILE_SIZE + 15, TILE_SIZE - 30, TILE_SIZE - 30);
     ctx.fillStyle = "#fff";
-    ctx.font = "12px sans-serif";
-    ctx.fillText("🚪 Goal", level.targetX * TILE_SIZE + 32, 125);
+    ctx.font = "10px sans-serif";
+    ctx.fillText("🚪 Goal", level.targetX * TILE_SIZE + 20, level.targetY * TILE_SIZE + TILE_SIZE / 2 + 4);
 
+    // Draw Student Square
     ctx.fillStyle = "#00b4d8";
-    ctx.fillRect(studentPos * TILE_SIZE + 35, 50, 30, 70);
+    ctx.fillRect(studentX * TILE_SIZE + 18, studentY * TILE_SIZE + 15, TILE_SIZE - 36, TILE_SIZE - 30);
 }
 
+// Code Evaluator Wrapper Core
 function runStudentCode() {
     if (isAnimating) return;
 
     const level = allLevels[currentLevelIndex];
-    studentPos = level.startX; 
+    studentX = level.startX;
+    studentY = level.startY;
     actionQueue = [];
     completedSubGoals = {};
     loadLevel(currentLevelIndex); 
 
     const studentCodeText = document.getElementById("code-box").value;
 
+    // FOUR-DIRECTION DIRECTIONAL UTILITIES
     const sandboxAPI = {
-        moveRight: () => actionQueue.push({ type: 'WALK', dist: 1 }),
-        moveLeft: () => actionQueue.push({ type: 'WALK', dist: -1 }),
-        jumpRight: () => actionQueue.push({ type: 'JUMP', dist: 2 }),
+        moveRight: () => actionQueue.push({ type: 'MOVE', x: 1, y: 0 }),
+        moveLeft: () => actionQueue.push({ type: 'MOVE', x: -1, y: 0 }),
+        moveDown: () => actionQueue.push({ type: 'MOVE', x: 0, y: 1 }),
+        moveUp: () => actionQueue.push({ type: 'MOVE', x: 0, y: -1 }),
         openLocker: () => actionQueue.push({ type: 'ACTION', value: 'OPEN_LOCKER' }),
         highFive: () => actionQueue.push({ type: 'ACTION', value: 'HIGH_FIVE' })
     };
@@ -352,17 +246,22 @@ function tickAnimationLoop() {
 
     const currentCommand = actionQueue.shift();
 
-    if (currentCommand.type === 'WALK' || currentCommand.type === 'JUMP') {
-        studentPos += currentCommand.dist;
+    if (currentCommand.type === 'MOVE') {
+        studentX += currentCommand.x;
+        studentY += currentCommand.y;
         
-        if (studentPos < 0) studentPos = 0;
-        if (studentPos >= level.gridSize) studentPos = level.gridSize - 1;
+        // Grid Boundaries Safeguards
+        if (studentX < 0) studentX = 0;
+        if (studentX >= level.gridWidth) studentX = level.gridWidth - 1;
+        if (studentY < 0) studentY = 0;
+        if (studentY >= level.gridHeight) studentY = level.gridHeight - 1;
 
+        // Obstacle Collision Check rules
         if (level.hazards) {
-            const hitHazard = level.hazards.find(hz => hz.x === studentPos);
-            if (hitHazard && currentCommand.type !== 'JUMP') {
+            const hitHazard = level.hazards.find(hz => hz.x === studentX && hz.y === studentY);
+            if (hitHazard) {
                 renderCanvasMap();
-                alert("Oops! You stepped right into a puddle!");
+                alert(`Oops! You ran right into a ${hitHazard.type}! Re-route your steps.`);
                 isAnimating = false;
                 return;
             }
@@ -372,7 +271,7 @@ function tickAnimationLoop() {
     if (currentCommand.type === 'ACTION') {
         if (level.subGoals) {
             level.subGoals.forEach(sg => {
-                if (studentPos === sg.triggerX && currentCommand.value === sg.requiredAction) {
+                if (studentX === sg.triggerX && studentY === sg.triggerY && currentCommand.value === sg.requiredAction) {
                     completedSubGoals[sg.id] = true;
                     const indicator = document.getElementById(`chk-${sg.id}`);
                     if (indicator) {
@@ -385,75 +284,54 @@ function tickAnimationLoop() {
     }
 
     renderCanvasMap();
-    setTimeout(tickAnimationLoop, 600); 
+    setTimeout(tickAnimationLoop, 500); 
 }
-
 function evaluateWinCondition() {
     const level = allLevels[currentLevelIndex];
     
-    if (studentPos === level.targetX) {
+    if (studentX === level.targetX && studentY === level.targetY) {
         let totalSubGoals = level.subGoals ? level.subGoals.length : 0;
         let earnedSubGoals = Object.keys(completedSubGoals).filter(k => completedSubGoals[k]).length;
 
         if (totalSubGoals === earnedSubGoals) {
-            alert("Level Completed! Outstanding 3-Star Execution! 🎉🏆");
+            alert("Level Completed! Outstanding 2D Path Routing! 🎉🏆");
             advanceNextLevel();
         } else {
-            alert("Main target reached, but you missed a sub-goal target.");
+            alert("Main door reached, but you forgot your task item checks.");
         }
     } else {
-        alert("Finished running, but you didn't reach the door.");
+        alert("Code finished, but you are not at the goal coordinates.");
     }
-}
+} // <-- This brace closes evaluateWinCondition()
 
-function advanceNextLevel() {
-    // Save current index as the highest beaten milestone index
-    let highestBeaten = parseInt(localStorage.getItem("highestLevelBeaten") || "0");
-    if (currentLevelIndex > highestBeaten) {
-        localStorage.setItem("highestLevelBeaten", currentLevelIndex.toString());
-    }
-
-    if (currentLevelIndex < allLevels.length - 1) {
-        currentLevelIndex++;
-        loadLevel(currentLevelIndex);
-    } else {
-        alert("Phenomenal work! You completed all matching school level structures!");
-    }
-}
-
-// Function triggered when a user changes the dropdown selection manually
-function changeLevelViaDropdown(selectedLevelIndex) {
-    const index = parseInt(selectedLevelIndex);
-    currentLevelIndex = index;
-    loadLevel(currentLevelIndex);
-}
-
-// Function to rebuild the dropdown list options and enforce locking rules
 function updateLevelDropdownUI() {
     const dropdown = document.getElementById("level-select");
     if (!dropdown || !allLevels || allLevels.length === 0) return;
-
-    dropdown.innerHTML = ""; // Clear existing options
-
-    // Check what the highest level beaten is from local memory (defaults to 1)
+    dropdown.innerHTML = "";
     let highestBeaten = parseInt(localStorage.getItem("highestLevelBeaten") || "0");
-
     allLevels.forEach((level, idx) => {
         const option = document.createElement("option");
         option.value = idx;
         option.text = `Lvl ${level.levelNumber}: ${level.title}`;
-        
-        // Match the dropdown display index to the current playing field index
-        if (idx === currentLevelIndex) {
-            option.selected = true;
-        }
-
-        // LOCKING RULE: Gray out if it's past Level 1 AND they haven't beaten the previous level
+        if (idx === currentLevelIndex) option.selected = true;
         if (idx > 0 && idx > highestBeaten) {
             option.disabled = true;
-            option.text += " 🔒"; // Add a lock emoji marker text string
+            option.text += " 🔒";
         }
-
         dropdown.appendChild(option);
     });
 }
+
+function advanceNextLevel() {
+    let highestBeaten = parseInt(localStorage.getItem("highestLevelBeaten") || "0");
+    if (currentLevelIndex > highestBeaten) {
+        localStorage.setItem("highestLevelBeaten", currentLevelIndex.toString());
+    }
+    if (currentLevelIndex < allLevels.length - 1) {
+        currentLevelIndex++;
+        loadLevel(currentLevelIndex);
+    } else {
+        alert("Phenomenal work! You completed the entire Classroom Code Quest grid system!");
+    }
+}
+
