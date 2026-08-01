@@ -335,3 +335,9 @@ function advanceNextLevel() {
     }
 }
 
+// Function triggered when a user changes the dropdown selection manually
+function changeLevelViaDropdown(selectedLevelIndex) {
+    const index = parseInt(selectedLevelIndex);
+    currentLevelIndex = index;
+    loadLevel(currentLevelIndex);
+}
