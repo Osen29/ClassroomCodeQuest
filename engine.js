@@ -269,6 +269,128 @@ const localLevelData = {
         { "type": "bin", "x": 3, "y": 1 },
         { "type": "bin", "x": 4, "y": 3 }
       ]
+    },
+    {
+      "levelNumber": 11,
+      "title": "The Acid Puddle Check",
+      "zone": "The Science Lab",
+      "description": "Chemical spill detected! Walk straight. Use an 'if' statement combined with student.seeFloor() to detect an 'acid' spill. If acid is found, execute student.pourNeutralizer(); before stepping forward.",
+      "gridWidth": 7,
+      "gridHeight": 4,
+      "startX": 0,
+      "startY": 1,
+      "targetX": 6,
+      "targetY": 1,
+      "mainGoal": "Reach the safety exit door at (6, 1)",
+      "subGoals": [
+        {
+          "id": "neutralize_spill",
+          "title": "Neutralize Acid Spill",
+          "triggerX": 3,
+          "triggerY": 1,
+          "requiredAction": "POUR_NEUTRALIZER"
+        }
+      ],
+      "hazards": [
+        { "type": "acid", "x": 3, "y": 1 }
+      ]
+    },
+    {
+      "levelNumber": 12,
+      "title": "Microscope Slide Sorting",
+      "zone": "The Science Lab",
+      "description": "Examine biological samples. Navigate to the workbench. Inspect slides with student.checkSlide(). If a slide reads 'contaminated', run student.sterilize(); else run student.logClean();.",
+      "gridWidth": 6,
+      "gridHeight": 5,
+      "startX": 0,
+      "startY": 2,
+      "targetX": 5,
+      "targetY": 2,
+      "mainGoal": "Process specimen data and report to (5, 2)",
+      "subGoals": [
+        {
+          "id": "process_slide",
+          "title": "Sterilize Contaminated Slide at (2,2)",
+          "triggerX": 2,
+          "triggerY": 2,
+          "requiredAction": "STERILIZE"
+        }
+      ],
+      "hazards": []
+    },
+    {
+      "levelNumber": 13,
+      "title": "Smoke Detector Override",
+      "zone": "The Science Lab",
+      "description": "The heat lamps triggered a false alarm! Walk down the panel path. Read the digital air sensor toggle using student.checkAir(). If it reads 'smoke', run student.pullLever();.",
+      "gridWidth": 7,
+      "gridHeight": 4,
+      "startX": 0,
+      "startY": 2,
+      "targetX": 6,
+      "targetY": 2,
+      "mainGoal": "Override alarm array at grid exit",
+      "subGoals": [
+        {
+          "id": "pull_lever",
+          "title": "Pull Safety Override Lever at (3,2)",
+          "triggerX": 3,
+          "triggerY": 2,
+          "requiredAction": "PULL_LEVER"
+        }
+      ],
+      "hazards": []
+    },
+    {
+      "levelNumber": 14,
+      "title": "Beaker Chemical Mixer",
+      "zone": "The Science Lab",
+      "description": "Synthesize a safe balancing agent. Check the reactive agent solution matrix using student.checkBeaker(). If it reads 'blue', add water; else if it reads 'yellow', add baking soda.",
+      "gridWidth": 6,
+      "gridHeight": 6,
+      "startX": 0,
+      "startY": 0,
+      "targetX": 5,
+      "targetY": 5,
+      "mainGoal": "Safely mix formula and leave room",
+      "subGoals": [
+        {
+          "id": "mix_chemical",
+          "title": "Mix Compound Matrix at (3,2)",
+          "triggerX": 3,
+          "triggerY": 2,
+          "requiredAction": "ADD_WATER"
+        }
+      ],
+      "hazards": [
+        { "type": "desk", "x": 2, "y": 4 }
+      ]
+    },
+    {
+      "levelNumber": 15,
+      "title": "The Greenhouse Exhaust",
+      "zone": "The Science Lab",
+      "description": "The automated biology ecosystem is overheating! Read the internal room climate index with student.checkTemp(). If temp is greater than 80, run student.turnOnFan();.",
+      "gridWidth": 8,
+      "gridHeight": 5,
+      "startX": 0,
+      "startY": 2,
+      "targetX": 7,
+      "targetY": 2,
+      "mainGoal": "Ventilate the facility and exit to computer bank",
+      "subGoals": [
+        {
+          "id": "activate_fan",
+          "title": "Activate Exhaust Fan at (4,2)",
+          "triggerX": 4,
+          "triggerY": 2,
+          "requiredAction": "TURN_ON_FAN"
+        }
+      ],
+      "hazards": [
+        { "type": "plant", "x": 3, "y": 1 },
+        { "type": "plant", "x": 5, "y": 3 }
+      ]
     }
   ]
 };
@@ -348,15 +470,19 @@ function renderCanvasMap() {
         }
     }
 
-    // Draw Hazards / Obstacles with dynamic coloring based on type
+       // Draw Hazards / Obstacles with dynamic coloring based on type
     if (level.hazards) {
         level.hazards.forEach(hz => {
             if (hz.type === "desk" || hz.type === "table" || hz.type === "counter") {
-                ctx.fillStyle = "#8b5a2b"; // Brown for furniture
+                ctx.fillStyle = "#8b5a2b"; // Brown furniture
             } else if (hz.type === "puddle" || hz.type === "spill") {
-                ctx.fillStyle = "#0077b6"; // Blue for liquid spills
+                ctx.fillStyle = "#0077b6"; // Blue liquids
+            } else if (hz.type === "acid") {
+                ctx.fillStyle = "#38b000"; // Vibrant neon acid green for Zone 3!
+            } else if (hz.type === "plant") {
+                ctx.fillStyle = "#1b4332"; // Dark foliage forest green for greenhouse
             } else {
-                ctx.fillStyle = "#4a4e69"; // Dark grey for trash cans/bins
+                ctx.fillStyle = "#4a4e69"; // Slate gray for electronics/bins
             }
             ctx.fillRect(hz.x * TILE_SIZE + 10, hz.y * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
             ctx.fillStyle = "#fff";
@@ -364,6 +490,7 @@ function renderCanvasMap() {
             ctx.fillText(hz.type.toUpperCase(), hz.x * TILE_SIZE + 12, hz.y * TILE_SIZE + TILE_SIZE / 2 + 4);
         });
     }
+
 
     // Draw Sub-Goals
     if (level.subGoals) {
@@ -404,7 +531,7 @@ function runStudentCode() {
 
     const studentCodeText = document.getElementById("code-box").value;
 
-    // REGISTERED ACTIONS LIST (HALLWAY + CAFETERIA API WORKING CAPABILITIES)
+    // REGISTERED ACTIONS LIST (HALLWAY + CAFETERIA + SCIENCE LAB CAPABILITIES)
     const sandboxAPI = {
         moveRight: () => actionQueue.push({ type: 'MOVE', x: 1, y: 0 }),
         moveLeft: () => actionQueue.push({ type: 'MOVE', x: -1, y: 0 }),
@@ -420,8 +547,36 @@ function runStudentCode() {
         pumpKetchup: () => actionQueue.push({ type: 'ACTION', value: 'PUMP_KETCHUP' }),
         wipeTable: () => actionQueue.push({ type: 'ACTION', value: 'WIPE_TABLE' }),
         tossTrash: () => actionQueue.push({ type: 'ACTION', value: 'TOSS_TRASH' }),
-        pickUpBottle: () => actionQueue.push({ type: 'ACTION', value: 'PICK_UP_BOTTLE' })
+        pickUpBottle: () => actionQueue.push({ type: 'ACTION', value: 'PICK_UP_BOTTLE' }),
+        
+        // --- NEW ZONE 3 SCIENCE LAB ACTIONS ---
+        pourNeutralizer: () => actionQueue.push({ type: 'ACTION', value: 'POUR_NEUTRALIZER' }),
+        sterilize: () => actionQueue.push({ type: 'ACTION', value: 'STERILIZE' }),
+        logClean: () => actionQueue.push({ type: 'ACTION', value: 'LOG_CLEAN' }),
+        pullLever: () => actionQueue.push({ type: 'ACTION', value: 'PULL_LEVER' }),
+        addWater: () => actionQueue.push({ type: 'ACTION', value: 'ADD_WATER' }),
+        addSoda: () => actionQueue.push({ type: 'ACTION', value: 'ADD_SODA' }),
+        turnOnFan: () => actionQueue.push({ type: 'ACTION', value: 'TURN_ON_FAN' }),
+
+        // --- DATA SENSOR RETURN COMMANDS (Crucial for Conditionals) ---
+        seeFloor: () => {
+            // Check if there is a hazard ahead at tile 3
+            return (studentX === 2 && studentY === 1) ? "acid" : "clean";
+        },
+        checkSlide: () => {
+            return "contaminated"; // Simulating fixed telemetry readout data
+        },
+        checkAir: () => {
+            return "smoke";
+        },
+        checkBeaker: () => {
+            return "blue";
+        },
+        checkTemp: () => {
+            return 85; // Returns integer checking parameter rule thresholds
+        }
     };
+
 
     try {
         const executeSandbox = new Function('student', studentCodeText);
