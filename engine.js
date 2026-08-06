@@ -609,17 +609,10 @@ function renderCanvasMap() {
                 ctx.fillStyle = "#38b000"; // Vibrant neon acid green for Zone 3!
             } else if (hz.type === "plant") {
                 ctx.fillStyle = "#1b4332"; // Dark foliage forest green for greenhouse
-            } else {
-                ctx.fillStyle = "#4a4e69"; // Slate gray for electronics/bins
-
-            } else if (hz.type === "acid") {
-                ctx.fillStyle = "#38b000"; 
-            } else if (hz.type === "plant") {
-                ctx.fillStyle = "#1b4332"; 
             } else if (hz.type === "server") {
                 ctx.fillStyle = "#5a189a"; // Royal cyber violet for server racks!
             } else {
-                ctx.fillStyle = "#4a4e69"; 
+                ctx.fillStyle = "#4a4e69"; // Slate gray for electronics/bins
             }
 
             ctx.fillRect(hz.x * TILE_SIZE + 10, hz.y * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
@@ -694,7 +687,7 @@ function runStudentCode() {
         checkSlide: () => "contaminated",
         checkAir: () => "smoke",
         checkBeaker: () => "blue",
-        checkTemp: () => 85
+        checkTemp: () => 85,
         // --- NEW ZONE 4 MEDIA CENTER ACTIONS ---
         createVariable: (name, val) => actionQueue.push({ type: 'ACTION', value: 'CREATE_VARIABLE' }),
         setBoolean: (name, bool) => actionQueue.push({ type: 'ACTION', value: 'SET_BOOLEAN' }),
