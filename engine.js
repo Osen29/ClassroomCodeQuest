@@ -389,6 +389,136 @@ const localLevelData = {
         { "type": "plant", "x": 3, "y": 1 },
         { "type": "plant", "x": 5, "y": 3 }
       ]
+    },
+    {
+      "levelNumber": 16,
+      "title": "Library ID Check-In",
+      "zone": "The Computer Media Center",
+      "description": "The security turnstile is locked. Create a variable using student.createVariable('codeName', 'Player1'); to register your badge and walk through the gate.",
+      "gridWidth": 6,
+      "gridHeight": 5,
+      "startX": 0,
+      "startY": 2,
+      "targetX": 5,
+      "targetY": 2,
+      "mainGoal": "Pass the turnstile gate and reach (5, 2)",
+      "subGoals": [
+        {
+          "id": "verify_id",
+          "title": "Scan Student ID Variable at (2,2)",
+          "triggerX": 2,
+          "triggerY": 2,
+          "requiredAction": "CREATE_VARIABLE"
+        }
+      ],
+      "hazards": []
+    },
+    {
+      "levelNumber": 17,
+      "title": "Chromebook Cart Charger",
+      "zone": "The Computer Media Center",
+      "description": "The laptop cart is dead. Set a boolean flag to true by writing student.setBoolean('isCharged', true); to power on the station before heading to your desk.",
+      "gridWidth": 6,
+      "gridHeight": 6,
+      "startX": 0,
+      "startY": 0,
+      "targetX": 5,
+      "targetY": 5,
+      "mainGoal": "Charge the cart and sit at your desk (5, 5)",
+      "subGoals": [
+        {
+          "id": "toggle_power",
+          "title": "Toggle Charger Boolean at (3,2)",
+          "triggerX": 3,
+          "triggerY": 2,
+          "requiredAction": "SET_BOOLEAN"
+        }
+      ],
+      "hazards": [
+        { "type": "desk", "x": 2, "y": 4 }
+      ]
+    },
+    {
+      "levelNumber": 18,
+      "title": "Custom Hall Pass Function",
+      "zone": "The Computer Media Center",
+      "description": "A hallway monitor is blocking the tech lab door! Declare a custom helper block function by writing student.declareFunction('fetchPass'); to bypass the monitor.",
+      "gridWidth": 7,
+      "gridHeight": 4,
+      "startX": 0,
+      "startY": 2,
+      "targetX": 6,
+      "targetY": 2,
+      "mainGoal": "Bypass the monitor and enter the Tech Lab",
+      "subGoals": [
+        {
+          "id": "run_macro",
+          "title": "Execute Hall Pass Function at (3,2)",
+          "triggerX": 3,
+          "triggerY": 2,
+          "requiredAction": "DECLARE_FUNCTION"
+        }
+      ],
+      "hazards": []
+    },
+    {
+      "levelNumber": 19,
+      "title": "Printer Queue Fixer",
+      "zone": "The Computer Media Center",
+      "description": "The library helper printer is jammed with bad data arrays. Run student.clearPrintQueue(); to flush out the ghost documents and print your essay.",
+      "gridWidth": 6,
+      "gridHeight": 5,
+      "startX": 0,
+      "startY": 4,
+      "targetX": 5,
+      "targetY": 0,
+      "mainGoal": "Fix the printer and head to the exit corridor",
+      "subGoals": [
+        {
+          "id": "flush_buffer",
+          "title": "Flush Print Buffer Array at (3,2)",
+          "triggerX": 3,
+          "triggerY": 2,
+          "requiredAction": "CLEAR_QUEUE"
+        }
+      ],
+      "hazards": [
+        { "type": "desk", "x": 2, "y": 2 }
+      ]
+    },
+    {
+      "levelNumber": 20,
+      "title": "The Grand Finale Robot Rally",
+      "zone": "The Computer Media Center",
+      "description": "Time to graduate! Program the smart automation vacuum to clean the center. Avoid server racks, collect the 3D-printer gears, and park the unit.",
+      "gridWidth": 8,
+      "gridHeight": 6,
+      "startX": 0,
+      "startY": 0,
+      "targetX": 7,
+      "targetY": 5,
+      "mainGoal": "Park the system at the charging pad (7, 5)",
+      "subGoals": [
+        {
+          "id": "gear_one",
+          "title": "Collect 3D Printer Gear at (3,1)",
+          "triggerX": 3,
+          "triggerY": 1,
+          "requiredAction": "COLLECT_GEAR"
+        },
+        {
+          "id": "gear_two",
+          "title": "Collect 3D Printer Gear at (5,3)",
+          "triggerX": 5,
+          "triggerY": 3,
+          "requiredAction": "COLLECT_GEAR"
+        }
+      ],
+      "hazards": [
+        { "type": "server", "x": 2, "y": 2 },
+        { "type": "server", "x": 4, "y": 4 },
+        { "type": "server", "x": 6, "y": 1 }
+      ]
     }
   ]
 };
@@ -481,7 +611,17 @@ function renderCanvasMap() {
                 ctx.fillStyle = "#1b4332"; // Dark foliage forest green for greenhouse
             } else {
                 ctx.fillStyle = "#4a4e69"; // Slate gray for electronics/bins
+
+            } else if (hz.type === "acid") {
+                ctx.fillStyle = "#38b000"; 
+            } else if (hz.type === "plant") {
+                ctx.fillStyle = "#1b4332"; 
+            } else if (hz.type === "server") {
+                ctx.fillStyle = "#5a189a"; // Royal cyber violet for server racks!
+            } else {
+                ctx.fillStyle = "#4a4e69"; 
             }
+
             ctx.fillRect(hz.x * TILE_SIZE + 10, hz.y * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
             ctx.fillStyle = "#fff";
             ctx.font = "10px sans-serif";
@@ -555,6 +695,13 @@ function runStudentCode() {
         checkAir: () => "smoke",
         checkBeaker: () => "blue",
         checkTemp: () => 85
+        // --- NEW ZONE 4 MEDIA CENTER ACTIONS ---
+        createVariable: (name, val) => actionQueue.push({ type: 'ACTION', value: 'CREATE_VARIABLE' }),
+        setBoolean: (name, bool) => actionQueue.push({ type: 'ACTION', value: 'SET_BOOLEAN' }),
+        declareFunction: (name) => actionQueue.push({ type: 'ACTION', value: 'DECLARE_FUNCTION' }),
+        clearPrintQueue: () => actionQueue.push({ type: 'ACTION', value: 'CLEAR_QUEUE' }),
+        collectGear: () => actionQueue.push({ type: 'ACTION', value: 'COLLECT_GEAR' })
+
     };
 
     try {
