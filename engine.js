@@ -1,4 +1,4 @@
-// EMBEDDED 2D LEVELS BLUEPRINT DATA (LEVELS 1 - 10)
+// PART 1: EMBEDDED LEVEL DATA MATRIX
 const localLevelData = {
   "levels": [
     {
@@ -181,7 +181,7 @@ const localLevelData = {
       "levelNumber": 8,
       "title": "Condiment Pump Chaos",
       "zone": "The Cafeteria",
-      "description": "Head to your lunch table! Stop at the condiment station at (3, 1) to pump ketchup using student.pumpKetchup();. Avoid the giant milk spill!",
+      "description": "Time to dress your lunch! Head to your table, but stop at the condiment station at (3, 1) to pump ketchup using student.pumpKetchup();.",
       "gridWidth": 7,
       "gridHeight": 6,
       "startX": 0,
@@ -200,15 +200,14 @@ const localLevelData = {
       ],
       "hazards": [
         { "type": "spill", "x": 3, "y": 3 },
-        { "type": "spill", "x": 4, "y": 3 },
-        { "type": "table", "x": 1, "y": 4 }
+        { "type": "spill", "x": 4, "y": 3 }
       ]
     },
     {
       "levelNumber": 9,
       "title": "Table Cleanup Duty",
       "zone": "The Cafeteria",
-      "description": "Lunch is over! Walk to the exit, wiping a dirty table at (2, 3) using student.wipeTable(); and throwing your trash away at (5, 1) using student.tossTrash();.",
+      "description": "Lunch is over! Help clean up. Walk to the exit, wiping a dirty table at (2, 3) using student.wipeTable(); and throwing your trash away at (5, 1) using student.tossTrash();.",
       "gridWidth": 8,
       "gridHeight": 5,
       "startX": 0,
@@ -233,8 +232,7 @@ const localLevelData = {
         }
       ],
       "hazards": [
-        { "type": "table", "x": 3, "y": 2 },
-        { "type": "table", "x": 4, "y": 2 }
+        { "type": "table", "x": 3, "y": 2 }
       ]
     },
     {
@@ -266,15 +264,14 @@ const localLevelData = {
         }
       ],
       "hazards": [
-        { "type": "bin", "x": 3, "y": 1 },
-        { "type": "bin", "x": 4, "y": 3 }
+        { "type": "bin", "x": 3, "y": 1 }
       ]
     },
     {
       "levelNumber": 11,
       "title": "The Acid Puddle Check",
       "zone": "The Science Lab",
-      "description": "Chemical spill detected! Walk straight. Use an 'if' statement combined with student.seeFloor() to detect an 'acid' spill. If acid is found, execute student.pourNeutralizer(); before stepping forward.",
+      "description": "Chemical spill detected! Use an 'if' check with student.seeFloor() to detect an 'acid' spill. If acid is found, run student.pourNeutralizer();.",
       "gridWidth": 7,
       "gridHeight": 4,
       "startX": 0,
@@ -285,7 +282,7 @@ const localLevelData = {
       "subGoals": [
         {
           "id": "neutralize_spill",
-          "title": "Neutralize Acid Spill",
+          "title": "Neutralize Acid Spill at (3,1)",
           "triggerX": 3,
           "triggerY": 1,
           "requiredAction": "POUR_NEUTRALIZER"
@@ -299,7 +296,7 @@ const localLevelData = {
       "levelNumber": 12,
       "title": "Microscope Slide Sorting",
       "zone": "The Science Lab",
-      "description": "Examine biological samples. Navigate to the workbench. Inspect slides with student.checkSlide(). If a slide reads 'contaminated', run student.sterilize(); else run student.logClean();.",
+      "description": "Examine biological samples. Inspect slides with student.checkSlide(). If it reads 'contaminated', run student.sterilize();.",
       "gridWidth": 6,
       "gridHeight": 5,
       "startX": 0,
@@ -310,7 +307,7 @@ const localLevelData = {
       "subGoals": [
         {
           "id": "process_slide",
-          "title": "Sterilize Contaminated Slide at (2,2)",
+          "title": "Sterilize Slide at (2,2)",
           "triggerX": 2,
           "triggerY": 2,
           "requiredAction": "STERILIZE"
@@ -322,7 +319,7 @@ const localLevelData = {
       "levelNumber": 13,
       "title": "Smoke Detector Override",
       "zone": "The Science Lab",
-      "description": "The heat lamps triggered a false alarm! Walk down the panel path. Read the digital air sensor toggle using student.checkAir(). If it reads 'smoke', run student.pullLever();.",
+      "description": "False alarm! Read the digital air sensor toggle using student.checkAir(). If it reads 'smoke', run student.pullLever();.",
       "gridWidth": 7,
       "gridHeight": 4,
       "startX": 0,
@@ -332,6 +329,7 @@ const localLevelData = {
       "mainGoal": "Override alarm array at grid exit",
       "subGoals": [
         {
+
           "id": "pull_lever",
           "title": "Pull Safety Override Lever at (3,2)",
           "triggerX": 3,
@@ -519,9 +517,9 @@ function renderCanvasMap() {
 }
 
 // Code Evaluator Execution Brain
+// PART 3: SANDBOX PARSERS, WIN TRIGGERS, AND UI MENUS
 function runStudentCode() {
     if (isAnimating) return;
-
     const level = allLevels[currentLevelIndex];
     studentX = level.startX;
     studentY = level.startY;
@@ -530,8 +528,6 @@ function runStudentCode() {
     loadLevel(currentLevelIndex); 
 
     const studentCodeText = document.getElementById("code-box").value;
-
-    // REGISTERED ACTIONS LIST (HALLWAY + CAFETERIA + SCIENCE LAB CAPABILITIES)
     const sandboxAPI = {
         moveRight: () => actionQueue.push({ type: 'MOVE', x: 1, y: 0 }),
         moveLeft: () => actionQueue.push({ type: 'MOVE', x: -1, y: 0 }),
@@ -548,40 +544,22 @@ function runStudentCode() {
         wipeTable: () => actionQueue.push({ type: 'ACTION', value: 'WIPE_TABLE' }),
         tossTrash: () => actionQueue.push({ type: 'ACTION', value: 'TOSS_TRASH' }),
         pickUpBottle: () => actionQueue.push({ type: 'ACTION', value: 'PICK_UP_BOTTLE' }),
-        
-        // --- NEW ZONE 3 SCIENCE LAB ACTIONS ---
         pourNeutralizer: () => actionQueue.push({ type: 'ACTION', value: 'POUR_NEUTRALIZER' }),
         sterilize: () => actionQueue.push({ type: 'ACTION', value: 'STERILIZE' }),
         logClean: () => actionQueue.push({ type: 'ACTION', value: 'LOG_CLEAN' }),
         pullLever: () => actionQueue.push({ type: 'ACTION', value: 'PULL_LEVER' }),
         addWater: () => actionQueue.push({ type: 'ACTION', value: 'ADD_WATER' }),
-        addSoda: () => actionQueue.push({ type: 'ACTION', value: 'ADD_SODA' }),
         turnOnFan: () => actionQueue.push({ type: 'ACTION', value: 'TURN_ON_FAN' }),
-
-        // --- DATA SENSOR RETURN COMMANDS (Crucial for Conditionals) ---
-        seeFloor: () => {
-            // Check if there is a hazard ahead at tile 3
-            return (studentX === 2 && studentY === 1) ? "acid" : "clean";
-        },
-        checkSlide: () => {
-            return "contaminated"; // Simulating fixed telemetry readout data
-        },
-        checkAir: () => {
-            return "smoke";
-        },
-        checkBeaker: () => {
-            return "blue";
-        },
-        checkTemp: () => {
-            return 85; // Returns integer checking parameter rule thresholds
-        }
+        seeFloor: () => (studentX === 2 && studentY === 1) ? "acid" : "clean",
+        checkSlide: () => "contaminated",
+        checkAir: () => "smoke",
+        checkBeaker: () => "blue",
+        checkTemp: () => 85
     };
-
 
     try {
         const executeSandbox = new Function('student', studentCodeText);
         executeSandbox(sandboxAPI);
-
         if (actionQueue.length > 0) {
             isAnimating = true;
             tickAnimationLoop();
@@ -598,25 +576,21 @@ function tickAnimationLoop() {
         evaluateWinCondition();
         return;
     }
-
     const currentCommand = actionQueue.shift();
 
     if (currentCommand.type === 'MOVE') {
         studentX += currentCommand.x;
         studentY += currentCommand.y;
-        
-        // Grid Boundaries Safeguards
         if (studentX < 0) studentX = 0;
         if (studentX >= level.gridWidth) studentX = level.gridWidth - 1;
         if (studentY < 0) studentY = 0;
         if (studentY >= level.gridHeight) studentY = level.gridHeight - 1;
 
-        // Obstacle Collision Checks
         if (level.hazards) {
             const hitHazard = level.hazards.find(hz => hz.x === studentX && hz.y === studentY);
             if (hitHazard) {
                 renderCanvasMap();
-                alert(`Oops! You ran right into a ${hitHazard.type}! Adjust your route path steps.`);
+                alert(`Oops! You ran into a ${hitHazard.type}!`);
                 isAnimating = false;
                 return;
             }
@@ -637,60 +611,43 @@ function tickAnimationLoop() {
             });
         }
     }
-
     renderCanvasMap();
     setTimeout(tickAnimationLoop, 500); 
 }
 
 function evaluateWinCondition() {
     const level = allLevels[currentLevelIndex];
-    
     if (studentX === level.targetX && studentY === level.targetY) {
         let totalSubGoals = level.subGoals ? level.subGoals.length : 0;
         let earnedSubGoals = Object.keys(completedSubGoals).filter(k => completedSubGoals[k]).length;
-
-        // Visual Display System: Trigger the interactive win panel configuration
         showWinOverlay(level.zone, totalSubGoals, earnedSubGoals);
     } else {
         alert("Code finished execution, but you are not at the target coordinates.");
     }
 }
 
-// Triggers the visual rendering layout transitions for the overlay system
 function showWinOverlay(zoneName, totalSubs, earnedSubs) {
     document.getElementById("win-zone-text").innerText = `${zoneName} Cleared`;
-    
-    // Reset star colors back to base configurations default state
     document.getElementById("star1").classList.remove("earned");
     document.getElementById("star2").classList.remove("earned");
     document.getElementById("star3").classList.remove("earned");
-
-    // Star Tracking Loop Rules: 
-    // Star 1 = Beat the level main door. 
-    // Star 2 = Half or more subtasks. 
-    // Star 3 = Perfect clean run.
     document.getElementById("star1").classList.add("earned");
     
     if (totalSubs > 0) {
         if (earnedSubs >= totalSubs / 2) document.getElementById("star2").classList.add("earned");
         if (earnedSubs === totalSubs) document.getElementById("star3").classList.add("earned");
     } else {
-        // If the level has no custom sub-goals (like level 1), automatically award 3 stars for success!
         document.getElementById("star2").classList.add("earned");
         document.getElementById("star3").classList.add("earned");
     }
 
-    // Set matching summary script responses based on mastery grades
     if (earnedSubs === totalSubs) {
-        document.getElementById("win-message").innerText = "Perfect 3-Star Mastery! All school task requirements fully logged inside schedule pipelines!";
+        document.getElementById("win-message").innerText = "Perfect 3-Star Mastery!";
     } else {
-        document.getElementById("win-message").innerText = "Level Cleared! Try re-writing optimized steps next time to catch missing tasks.";
+        document.getElementById("win-message").innerText = "Level Cleared! Try to catch the missing tasks.";
     }
-
-    // Slide overlay visible onto player desktop panels
     document.getElementById("win-overlay").classList.add("active");
 }
-
 
 function updateLevelDropdownUI() {
     const dropdown = document.getElementById("level-select");
@@ -718,8 +675,6 @@ function advanceNextLevel() {
     if (currentLevelIndex < allLevels.length - 1) {
         currentLevelIndex++;
         loadLevel(currentLevelIndex);
-        
-        // Automatically inject fresh starter configurations text for the newly unlocked grid!
         const nextLevel = allLevels[currentLevelIndex];
         document.getElementById("code-box").value = `// ${nextLevel.description}\nstudent.moveRight();\n`;
     } else {
@@ -731,16 +686,11 @@ function changeLevelViaDropdown(selectedLevelIndex) {
     const index = parseInt(selectedLevelIndex);
     currentLevelIndex = index;
     loadLevel(currentLevelIndex);
-    
     const chosenLevel = allLevels[currentLevelIndex];
     document.getElementById("code-box").value = `// ${chosenLevel.description}\nstudent.moveRight();\n`;
 }
-// Triggered when a student clicks the "Next Level" action switch inside the win screen card
+
 function closeWinOverlayAndAdvance() {
-    // Hide panel smoothly
     document.getElementById("win-overlay").classList.remove("active");
-    
-    // Call baseline progression system
     advanceNextLevel();
 }
-
